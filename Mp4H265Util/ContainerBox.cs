@@ -1,31 +1,10 @@
 ﻿namespace Mp4H265Util;
 
-public sealed class ContainerBox : Mp4Box
+public sealed class ContainerBox : AbstractContainerBox
 {
-    public override void DeserializePayload(BinaryReader br, long payloadSize)
-    {
-        long end = br.BaseStream.Position + payloadSize;
+    protected override void ReadHeader(BinaryReader br) { }
 
-        while (br.BaseStream.Position + 8 <= end)
-        {
-            var child = Mp4BoxReader.Read(br);
-            if (child == null) break;
-            Children.Add(child);
-        }
+    protected override void WriteHeader(BinaryWriter bw) { }
 
-        // 万一読み残しがあればスキップ
-        if (br.BaseStream.Position < end)
-            br.BaseStream.Position = end;
-    }
-
-    public override void SerializePayload(BinaryWriter bw)
-    {
-        foreach (var child in Children)
-            Mp4BoxWriter.WriteBox(bw, child);
-    }
-
-    public override string PayloadToString()
-    {
-        return $"Children: {Children.Count}";
-    }
+    protected override string HeaderToString() => "";
 }

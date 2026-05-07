@@ -12,7 +12,7 @@ public abstract class Mp4Box
 
     public void Pp(string indent = "")
     {
-        Console.WriteLine($"{indent}Box: {Type}, Size: {Size}, Payload: {PayloadToString()}");
+        Console.WriteLine($"{indent}[{Type}({Size})], {PayloadToString()}");
         foreach (var child in Children)
             child.Pp(indent + "  ");
     }

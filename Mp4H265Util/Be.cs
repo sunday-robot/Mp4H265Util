@@ -25,4 +25,10 @@ public static class Be
         var s = Encoding.ASCII.GetString(br.ReadBytes(length));
         return s;
     }
+
+    public static void WriteString(BinaryWriter bw, string value)
+    {
+        var bytes = Encoding.ASCII.GetBytes(value);
+        bw.Write(bytes);
+    }
 }

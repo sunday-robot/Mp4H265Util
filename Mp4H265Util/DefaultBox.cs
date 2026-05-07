@@ -15,6 +15,6 @@ public sealed  class DefaultBox : Mp4Box {
 
     public override string PayloadToString()
     {
-        return $"size = {(_payload!).Length}";
+        return $"(payload size = {(_payload!).Length})";
     }
 }

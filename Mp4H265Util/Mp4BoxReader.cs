@@ -20,6 +20,9 @@ static class Mp4BoxReader
             "mdia" => new ContainerBox(),
             "minf" => new ContainerBox(),
             "stbl" => new ContainerBox(),
+            "stsd" => new StsdBox(),
+            "hvc1" => new Hvc1Box(),
+            "hev1" => new Hvc1Box(),
             _ => new DefaultBox()
         };
 
