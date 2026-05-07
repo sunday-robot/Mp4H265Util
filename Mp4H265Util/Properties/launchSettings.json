@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Mp4H265Util": {
+      "commandName": "Project",
+      "commandLineArgs": "sample.mp4 output.mp4",
+      "workingDirectory": "."
+    }
+  }
+}
