@@ -1,6 +1,6 @@
 ﻿namespace Mp4H265Util;
 
-public sealed class MoovBox : Mp4Box
+public sealed class ContainerBox : Mp4Box
 {
     public override void DeserializePayload(BinaryReader br, long payloadSize)
     {

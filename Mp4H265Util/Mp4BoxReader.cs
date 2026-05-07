@@ -15,7 +15,11 @@ static class Mp4BoxReader
         Mp4Box box = type switch
         {
             "ftyp" => new FtypBox(),
-            "moov" => new MoovBox(),
+            "moov" => new ContainerBox(),
+            "trak" => new ContainerBox(),
+            "mdia" => new ContainerBox(),
+            "minf" => new ContainerBox(),
+            "stbl" => new ContainerBox(),
             _ => new DefaultBox()
         };
 

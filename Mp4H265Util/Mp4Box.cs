@@ -10,14 +10,11 @@ public abstract class Mp4Box
 
     public abstract void SerializePayload(BinaryWriter bw);
 
-    public void Pp()
+    public void Pp(string indent = "")
     {
-        Console.WriteLine($"Box: {Type}, Size: {Size}, Payload: {PayloadToString()}");
+        Console.WriteLine($"{indent}Box: {Type}, Size: {Size}, Payload: {PayloadToString()}");
         foreach (var child in Children)
-        {
-            Console.Write("  ");
-            child.Pp();
-        }
+            child.Pp(indent + "  ");
     }
 
     public abstract string PayloadToString();
