@@ -18,7 +18,7 @@ class Mp4File
 
             file.Boxes.Add(box);
 
-            Console.WriteLine(box);
+            box.Pp();
         }
 
         return file;

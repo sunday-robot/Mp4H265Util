@@ -1,4 +1,6 @@
-﻿namespace Mp4H265Util;
+﻿using System.Text;
+
+namespace Mp4H265Util;
 
 public static class Be
 {
@@ -16,5 +18,11 @@ public static class Be
             (byte)(value >> 8),
             (byte)value
         });
+    }
+
+    public static string ReadString(BinaryReader br, int length)
+    {
+        var s = Encoding.ASCII.GetString(br.ReadBytes(length));
+        return s;
     }
 }

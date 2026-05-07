@@ -8,13 +8,14 @@ static class Mp4BoxReader
             return null;
 
         uint size = Be.ReadUInt32(br);
-        string type = new(br.ReadChars(4));
+        string type = Be.ReadString(br, 4);
 
         long payloadSize = size - 8;
 
         Mp4Box box = type switch
         {
             "ftyp" => new FtypBox(),
+            "moov" => new MoovBox(),
             _ => new DefaultBox()
         };
 
