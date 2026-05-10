@@ -13,8 +13,9 @@ class Program
         var input = args[0];
         var output = args[1];
 
-        var mp4 = Mp4File.Deserialize(input);
-        mp4.Serialize(output);
+        var boxes = Mp4Reader.Read(input);
+        Mp4Printer.Print(boxes);
+        Mp4Writer.Write(output, boxes);
 
         Console.WriteLine("Done.");
     }

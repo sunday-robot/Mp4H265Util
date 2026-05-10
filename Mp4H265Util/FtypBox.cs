@@ -8,32 +8,33 @@ class FtypBox : Mp4Box
     public uint MinorVersion { get; set; }
     public List<string> CompatibleBrands { get; set; } = [];
 
-    public override void DeserializePayload(BinaryReader br, long payloadSize)
+    public override void ReadProperties(BinaryReader br)
     {
-        MajorBrand = Encoding.ASCII.GetString(br.ReadBytes(4));
+        MajorBrand = Be.ReadString(br, 4);
         MinorVersion = Be.ReadUInt32(br);
-
-        long remaining = payloadSize - 8;
-
-        while (remaining >= 4)
+        var remaining = Size - 16;
+        if (remaining % 4 != 0)
+            throw new Exception();
+        for (; remaining > 0; remaining -= 4)
         {
-            string brand = Encoding.ASCII.GetString(br.ReadBytes(4));
+            var brand = Be.ReadString(br, 4);
             CompatibleBrands.Add(brand);
-            remaining -= 4;
         }
     }
 
-    public override string PayloadToString()
+    protected override void WriteProperties(BinaryWriter bw)
     {
-        return $"MajorBrand: {MajorBrand}, MinorVersion: {MinorVersion}, CompatibleBrands: [{string.Join(", ", CompatibleBrands)}]";
+        Be.WriteString(bw, MajorBrand);
+        Be.WriteUInt32(bw, MinorVersion);
+        foreach (var brand in CompatibleBrands)
+            Be.WriteString(bw, brand);
     }
 
-    public override void SerializePayload(BinaryWriter bw)
+    protected override void PrintProperties(string indent)
     {
-        bw.Write(Encoding.ASCII.GetBytes(MajorBrand));
-        Be.WriteUInt32(bw, MinorVersion);
-
-        foreach (var brand in CompatibleBrands)
-            bw.Write(Encoding.ASCII.GetBytes(brand));
+        PrintProperty(indent, "MajorBrand", MajorBrand);
+        PrintProperty(indent, "MinorVersion", MinorVersion.ToString());
+        for (int i = 0; i < CompatibleBrands.Count; i++)
+            PrintProperty(indent, $"CompatibleBrand[{i}]", CompatibleBrands[i]);
     }
 }

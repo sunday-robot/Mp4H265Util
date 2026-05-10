@@ -1,16 +1,13 @@
 ﻿namespace Mp4H265Util;
 
-static class Mp4BoxReader
+public static class Mp4BoxReader
 {
-    public static Mp4Box? Read(BinaryReader br)
+    public static Mp4Box Read(BinaryReader br)
     {
-        if (br.BaseStream.Position + 8 > br.BaseStream.Length)
-            return null;
-
         uint size = Be.ReadUInt32(br);
         string type = Be.ReadString(br, 4);
-
-        long payloadSize = size - 8;
+        var end = br.BaseStream.Position + size - 8;
+        //Console.WriteLine($"{indent}{type}({size})");
 
         Mp4Box box = type switch
         {
@@ -23,15 +20,20 @@ static class Mp4BoxReader
             "stsd" => new StsdBox(),
             "hvc1" => new Hvc1Box(),
             "hev1" => new Hvc1Box(),
+            "hvcC" => new HvcCBox(),
             _ => new DefaultBox()
         };
-
         box.Size = size;
         box.Type = type;
-
-        box.DeserializePayload(br, payloadSize);
+        box.ReadProperties(br);
+        while (br.BaseStream.Position < end)
+        {
+            var child = Mp4BoxReader.Read(br)!;
+            box.Children.Add(child);
+        }
+        if (br.BaseStream.Position != end)
+            throw new InvalidDataException($"Box {type} has invalid size.");
 
         return box;
     }
-
 }

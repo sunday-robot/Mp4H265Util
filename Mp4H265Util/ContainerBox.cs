@@ -1,10 +1,10 @@
 ﻿namespace Mp4H265Util;
 
-public sealed class ContainerBox : AbstractContainerBox
+public sealed class ContainerBox : Mp4Box
 {
-    protected override void ReadHeader(BinaryReader br) { }
+    public override void ReadProperties(BinaryReader br) { }
 
-    protected override void WriteHeader(BinaryWriter bw) { }
+    protected override void WriteProperties(BinaryWriter bw) { }
 
-    protected override string HeaderToString() => "";
+    protected override void PrintProperties(string indent) { }
 }

@@ -1,21 +1,21 @@
 ﻿namespace Mp4H265Util;
 
-public sealed class Hvc1Box : AbstractContainerBox
+public sealed class Hvc1Box : Mp4Box
 {
-    public byte[] Header { get; set; } = [];
+    public byte[] Properties { get; set; } = [];
 
-    protected override void ReadHeader(BinaryReader br)
+    public override void ReadProperties(BinaryReader br)
     {
-        Header = br.ReadBytes(78);
+        Properties = Be.ReadBytes(br, 78);
     }
 
-    protected override void WriteHeader(BinaryWriter bw)
+    protected override void WriteProperties(BinaryWriter bw)
     {
-        bw.Write(Header);
+        bw.Write(Properties);
     }
 
-    protected override string HeaderToString()
+    protected override void PrintProperties(string indent)
     {
-        return $"Header={BitConverter.ToString(Header)}";
+        PrintProperty(indent, "Properties", BitConverter.ToString(Properties));
     }
 }

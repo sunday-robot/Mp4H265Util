@@ -6,16 +6,33 @@ public abstract class Mp4Box
     public string Type { get; set; } = "";
     public List<Mp4Box> Children { get; set; } = [];
 
-    public abstract void DeserializePayload(BinaryReader br, long payloadSize);
+    public abstract void ReadProperties(BinaryReader br);
 
-    public abstract void SerializePayload(BinaryWriter bw);
-
-    public void Pp(string indent = "")
+    public void Write(BinaryWriter bw)
     {
-        Console.WriteLine($"{indent}[{Type}({Size})], {PayloadToString()}");
+        Be.WriteUInt32(bw, Size);
+        Be.WriteString(bw, Type);
+        WriteProperties(bw);
         foreach (var child in Children)
-            child.Pp(indent + "  ");
+            child.Write(bw);
     }
 
-    public abstract string PayloadToString();
+    protected abstract void WriteProperties(BinaryWriter bw);
+
+    public void Print(string indent, int index)
+    {
+        Console.WriteLine($"{indent}[{index}]{Type}({Size} bytes)");
+        PrintProperties(indent);
+        for (int i = 0; i < Children.Count; i++)
+        {
+            Children[i].Print(indent + "  ", i);
+        }
+    }
+
+    protected abstract void PrintProperties(string indent);
+
+    protected static void PrintProperty(string indent, string name, string value)
+    {
+        Console.WriteLine($"{indent}    {name}: {value}");
+    }
 }

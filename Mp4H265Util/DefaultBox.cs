@@ -1,20 +1,24 @@
 ﻿namespace Mp4H265Util;
 
-public sealed  class DefaultBox : Mp4Box {
-    byte[]? _payload = null;
+/// <summary>
+/// とりあえずのMp4Boxクラス。プロパティ群、子Boxについては、まとめてpayloadというバイト配列とする。
+/// </summary>
+public sealed class DefaultBox : Mp4Box
+{
+    byte[]? _payload;
 
-    public override void DeserializePayload(BinaryReader br, long payloadSize)
+    public override void ReadProperties(BinaryReader br)
     {
-        _payload = br.ReadBytes((int)payloadSize);
+        _payload = Be.ReadBytes(br, Size - 8);
     }
 
-    public override void SerializePayload(BinaryWriter bw)
+    protected override void WriteProperties(BinaryWriter bw)
     {
         bw.Write(_payload!);
     }
 
-    public override string PayloadToString()
+    protected override void PrintProperties(string indent)
     {
-        return $"(payload size = {(_payload!).Length})";
+        PrintProperty(indent, "(not implemented)", "");
     }
 }
